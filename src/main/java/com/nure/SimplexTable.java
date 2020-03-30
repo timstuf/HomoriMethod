@@ -18,9 +18,13 @@ abstract class SimplexTable {
     }
 
     protected abstract boolean isNotOptimized();
+
     protected abstract void countdeltaJ();
+
     protected abstract void countEvaluations();
+
     protected abstract void recountTable();
+
     protected void createTable() {
         table[0][0] = cKoefs[bazis[0] - 1];
         table[1][0] = cKoefs[bazis[1] - 1];
@@ -37,7 +41,9 @@ abstract class SimplexTable {
     }
 
     protected abstract void printTable();
+
     protected abstract void printSolution();
+
     public SimplexTable go() {
         System.out.println("_____________________________________________________________________________");
         printTable();

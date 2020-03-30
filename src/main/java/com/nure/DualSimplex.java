@@ -2,6 +2,7 @@ package com.nure;
 
 public class DualSimplex extends SimplexTable {
     private int minIndex;
+
     public DualSimplex(NormalSimplex simplex) {
         super();
         formNewBazis(simplex);
@@ -22,8 +23,8 @@ public class DualSimplex extends SimplexTable {
         double[][] newTable = new double[Constants.m + 3][Constants.n + 4];
         for (; i < Constants.m; i++) {
             if (table[i][1] != Math.floor(table[i][1])) {
-                for (int j = 0; j < newTable.length-2; j++) {
-                    System.arraycopy(table[j], 0, newTable[j], 0, table[j].length-1);
+                for (int j = 0; j < newTable.length - 2; j++) {
+                    System.arraycopy(table[j], 0, newTable[j], 0, table[j].length - 1);
                 }
                 break;
             }
@@ -33,24 +34,27 @@ public class DualSimplex extends SimplexTable {
         countdeltaJ();
         countEvaluations();
     }
+
     @Override
     protected void countdeltaJ() {
-        for (int i = 1; i < Constants.n+1; i++) {
+        for (int i = 1; i < Constants.n + 1; i++) {
             int evaluation = 0;
-            for (int j = 0; j < Constants.m+1; j++) {
+            for (int j = 0; j < Constants.m + 1; j++) {
                 evaluation += table[j][0] * table[j][i];
             }
             if (i != 1) evaluation = evaluation - cKoefs[i - 2];
-            table[Constants.m+1][i] = evaluation;
+            table[Constants.m + 1][i] = evaluation;
         }
     }
-    private void formNewEquation(double[][] newTable, int fractIndex){
-        newTable[Constants.m][Constants.n+2] = 1;
+
+    private void formNewEquation(double[][] newTable, int fractIndex) {
+        newTable[Constants.m][Constants.n + 2] = 1;
         newTable[Constants.m][1] = (int) newTable[fractIndex][1] - newTable[fractIndex][1];
-        for (int i = 2; i < Constants.n+2; i++) {
+        for (int i = 2; i < Constants.n + 2; i++) {
             newTable[Constants.m][i] = (int) newTable[fractIndex][i] - newTable[fractIndex][i];
         }
     }
+
     @Override
     protected boolean isNotOptimized() {
         for (int i = 0; i < Constants.m; i++) {
@@ -60,10 +64,11 @@ public class DualSimplex extends SimplexTable {
         }
         return false;
     }
+
     @Override
     protected void countEvaluations() {
         int minIndex = findMinBazis();
-        for (int i = 1; i < Constants.n+3; i++) {
+        for (int i = 1; i < Constants.n + 3; i++) {
             if (table[minIndex][i] >= 0) table[Constants.m + 2][i] = Constants.DONT_COUNT;
             else table[Constants.m + 2][i] = table[Constants.m + 1][i] / table[minIndex][i];
         }
@@ -73,10 +78,10 @@ public class DualSimplex extends SimplexTable {
     protected void recountTable() {
         int minEval = 0;
         double min = Double.MAX_VALUE;
-        for (int i = 2; i < Constants.n+2; i++) {
-            if (table[Constants.m+2][i] < min && table[Constants.m+2][i] < Constants.DONT_COUNT) {
+        for (int i = 2; i < Constants.n + 2; i++) {
+            if (table[Constants.m + 2][i] < min && table[Constants.m + 2][i] < Constants.DONT_COUNT) {
                 minEval = i;
-                min = table[Constants.m+2][i];
+                min = table[Constants.m + 2][i];
             }
         }
         bazis[minIndex] = minEval - 1;
@@ -116,8 +121,9 @@ public class DualSimplex extends SimplexTable {
                 j = 1;
             }
 
-            for (; j < table[0].length-1; j++) {
-                if(i==table.length-1 && table[i][j]==Constants.DONT_COUNT) System.out.print(String.format("%8s", "-"));
+            for (; j < table[0].length - 1; j++) {
+                if (i == table.length - 1 && table[i][j] == Constants.DONT_COUNT)
+                    System.out.print(String.format("%8s", "-"));
                 else System.out.print(String.format("%8.1f", table[i][j]));
 
             }
@@ -125,14 +131,16 @@ public class DualSimplex extends SimplexTable {
         }
         System.out.println("_____________________________________________________________________________");
     }
+
     protected double[] getSolutions() {
-        double[] solution = new double[Constants.n+1];
-        solution[0] = table[Constants.m+1][1] + cKoefs[cKoefs.length - 1];
+        double[] solution = new double[Constants.n + 1];
+        solution[0] = table[Constants.m + 1][1] + cKoefs[cKoefs.length - 1];
         for (int i = 0; i < bazis.length; i++) {
             solution[bazis[i]] = table[i][1];
         }
         return solution;
     }
+
     @Override
     protected void printSolution() {
         double[] solution = getSolutions();
@@ -141,17 +149,18 @@ public class DualSimplex extends SimplexTable {
             System.out.println("x" + (i) + " has value " + String.format("%.1f", solution[i]));
         }
     }
-    private int findMinBazis(){
+
+    private int findMinBazis() {
         double min = 1;
         int minIndex = -1;
-        for (int i = 0; i < Constants.m+1; i++) {
-            if(table[i][1]>=0) continue;
-            if(table[i][1]<min){
+        for (int i = 0; i < Constants.m + 1; i++) {
+            if (table[i][1] >= 0) continue;
+            if (table[i][1] < min) {
                 min = table[i][1];
                 minIndex = i;
             }
         }
-        if(min>0) throw new IllegalArgumentException();
+        if (min > 0) throw new IllegalArgumentException();
         return minIndex;
     }
 }

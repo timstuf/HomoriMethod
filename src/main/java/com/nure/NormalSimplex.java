@@ -1,10 +1,12 @@
 package com.nure;
 
-public class NormalSimplex extends SimplexTable{
+public class NormalSimplex extends SimplexTable {
     private int maxIndex;
+
     public NormalSimplex(int[] bazis, int[][] equations, int[] cKoefs) {
         super(bazis, equations, cKoefs);
     }
+
     @Override
     protected boolean isNotOptimized() {
         for (int i = 0; i < Constants.n; i++) {
@@ -12,6 +14,7 @@ public class NormalSimplex extends SimplexTable{
         }
         return false;
     }
+
     @Override
     protected void printTable() {
         System.out.println("_____________________________________________________________________________");
@@ -32,7 +35,8 @@ public class NormalSimplex extends SimplexTable{
             }
 
             for (; j < table[0].length; j++) {
-                if(j==table[0].length-1 && table[i][j]==Constants.DONT_COUNT) System.out.print(String.format("%8s", "-"));
+                if (j == table[0].length - 1 && table[i][j] == Constants.DONT_COUNT)
+                    System.out.print(String.format("%8s", "-"));
                 else System.out.print(String.format("%8.1f", table[i][j]));
 
             }
@@ -41,7 +45,8 @@ public class NormalSimplex extends SimplexTable{
         System.out.println("_____________________________________________________________________________");
     }
 
-    protected void printSolution() {}
+    protected void printSolution() {
+    }
 
     @Override
     protected void countdeltaJ() {
@@ -54,14 +59,15 @@ public class NormalSimplex extends SimplexTable{
             table[Constants.m][i] = evaluation;
         }
     }
+
     @Override
     protected void recountTable() {
         int minEval = 0;
         double min = Double.MAX_VALUE;
         for (int i = 0; i < Constants.m; i++) {
-            if (table[i][Constants.n+2] < min && table[i][Constants.n+2] > Constants.DONT_COUNT) {
+            if (table[i][Constants.n + 2] < min && table[i][Constants.n + 2] > Constants.DONT_COUNT) {
                 minEval = i;
-                min = table[i][Constants.n+2];
+                min = table[i][Constants.n + 2];
             }
         }
         bazis[minEval] = maxIndex - 1;
@@ -82,6 +88,7 @@ public class NormalSimplex extends SimplexTable{
         }
         table = newTable;
     }
+
     @Override
     protected void countEvaluations() {
         int maxIndex = 0; //number of направляющий столбенц
