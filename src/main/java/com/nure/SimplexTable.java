@@ -1,15 +1,15 @@
 package com.nure;
 
 abstract class SimplexTable {
-    protected double[][] table;
-    protected int[] cKoefs;
-    protected int[][] equations;
-    protected int[] bazis;
+    double[][] table;
+    int[] cKoefs;
+    int[] bazis;
+    private int[][] equations;
 
-    public SimplexTable() {
+    SimplexTable() {
     }
 
-    public SimplexTable(int[] bazis, int[][] equations, int[] cKoefs) {
+    SimplexTable(int[] bazis, int[][] equations, int[] cKoefs) {
         table = new double[Constants.m + 1][Constants.n + 3];
         this.bazis = bazis;
         this.equations = equations;
